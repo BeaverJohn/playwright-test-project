@@ -35,7 +35,7 @@ export class LoginPage extends BasePage {
     }
 
     async loginWithDefaultCreds(): Promise<void> {
-        await this.loginWithCreds('testuser2288821111@email.com', 'test123', 'testuser2288821111')
+        await this.loginWithCreds(process.env.UI_TEST_EMAIL!, process.env.UI_TEST_PASSWORD!, process.env.UI_TEST_USERNAME!)
     }
 
     async loginWithUserPayload(userData: UserPayload): Promise<void> {

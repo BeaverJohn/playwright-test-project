@@ -9,8 +9,8 @@ const authFile = 'playwright/.auth/user_api.json';
 setup('authenticate via API', async ({ request }) => {
   const response = await request.post('/auth', {
     data: {
-      username: 'admin',
-      password: 'password123',
+      username: process.env.API_ADMIN_USERNAME!,
+      password: process.env.API_ADMIN_PASSWORD!,
     }
   });
 

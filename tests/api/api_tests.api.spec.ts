@@ -2,7 +2,7 @@ import { expect, test } from '../../fixtures/index';
 import { BookingPayload } from '../../utils/models/BookingPayload';
 import { BookingFilterParams } from '../../api/BookingApiClient';
 
-test('create new booking and retreive it', async ({ bookingApiClient, newBooking }) => {
+test('create new booking and retreive it', { tag: '@smoke' }, async ({ bookingApiClient, newBooking }) => {
     
     const responseCreate = await bookingApiClient.createBooking(newBooking)
     expect(responseCreate.status()).toBe(200)
@@ -17,7 +17,7 @@ test('create new booking and retreive it', async ({ bookingApiClient, newBooking
     expect(jsonGet).toEqual(newBooking);
 })
 
-test('create new booking and delete it', async ({ bookingApiClient, newBooking }) => {
+test('create new booking and delete it', { tag: '@smoke' }, async ({ bookingApiClient, newBooking }) => {
     
     const responseCreate = await bookingApiClient.createBooking(newBooking)
     expect(responseCreate.status()).toBe(200)
@@ -33,7 +33,7 @@ test('create new booking and delete it', async ({ bookingApiClient, newBooking }
     expect(responseGet.status()).toBe(404)
 })
 
-test('create new booking and fully update it', async ({ bookingApiClient, newBooking }) => {
+test('create new booking and fully update it', { tag: '@smoke' }, async ({ bookingApiClient, newBooking }) => {
     
     const responseCreate = await bookingApiClient.createBooking(newBooking)
     expect(responseCreate.status()).toBe(200)
@@ -54,7 +54,7 @@ test('create new booking and fully update it', async ({ bookingApiClient, newBoo
     expect(jsonGet).toEqual(newBookingData);
 })
 
-test('create new booking and partially update it', async ({ bookingApiClient, newBooking }) => {
+test('create new booking and partially update it', { tag: '@smoke' }, async ({ bookingApiClient, newBooking }) => {
     
     const responseCreate = await bookingApiClient.createBooking(newBooking)
     expect(responseCreate.status()).toBe(200)
@@ -74,7 +74,7 @@ test('create new booking and partially update it', async ({ bookingApiClient, ne
     expect(jsonGet.lastname).toEqual("test");
 })
 
-test('create new bookings and filter them', async ({ bookingApiClient }) => {
+test('create new bookings and filter them', { tag: '@smoke' }, async ({ bookingApiClient }) => {
     
     const newBookingData1 = BookingPayload.createDefault({firstname: "test", lastname: "test", totalprice: 222, depositpaid: false, bookingdates: {checkin: '2026-12-01', checkout: '2026-12-11'}, additionalneeds: "Dinner"})
     const newBookingData2 = BookingPayload.createDefault({firstname: "test", lastname: "test", totalprice: 222, depositpaid: false, bookingdates: {checkin: '2026-12-01', checkout: '2026-12-11'}, additionalneeds: "Dinner"})

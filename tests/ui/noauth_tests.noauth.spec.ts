@@ -3,7 +3,7 @@ import { UserPayload } from '../../utils/models/UserPayload';
 
 test.use({ storageState: { cookies: [], origins: [] } });
 
-test('new user registration', async ({ loginPage, signupPage, accountCreatedPage, newUser }) => {
+test('new user registration', { tag: '@smoke' }, async ({ loginPage, signupPage, accountCreatedPage, newUser }) => {
 
   await loginPage.goto()
   await loginPage.startSignUpWithUserPayload(newUser)
@@ -19,7 +19,7 @@ test('new user registration', async ({ loginPage, signupPage, accountCreatedPage
 
 });
 
-test('default user login', async ({ loginPage }) => {
+test('default user login', { tag: '@smoke' }, async ({ loginPage }) => {
   
   const userData = UserPayload.getDefaultUser()
   
