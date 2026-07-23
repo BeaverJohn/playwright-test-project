@@ -1,16 +1,9 @@
 import { defineConfig, devices } from '@playwright/test';
+import * as dotenv from 'dotenv';
+import path from 'path';
 
-/**
- * Read environment variables from file.
- * https://github.com/motdotla/dotenv
- */
-// import dotenv from 'dotenv';
-// import path from 'path';
-// dotenv.config({ path: path.resolve(__dirname, '.env') });
+dotenv.config({ path: path.resolve(__dirname, '.env') });
 
-/**
- * See https://playwright.dev/docs/test-configuration.
- */
 export default defineConfig({
   testDir: './tests',
   fullyParallel: true,
@@ -24,11 +17,8 @@ export default defineConfig({
   reporter: 'html',
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
-    // baseURL: 'https://automationexercise.com',
-
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
-    trace: 'on-first-retry',
-    
+    trace: 'retain-on-failure',
     testIdAttribute: 'data-qa',
     screenshot: 'only-on-failure'
   },
@@ -38,37 +28,40 @@ export default defineConfig({
     {
       name: 'setup - ui',
       testMatch: '**/ui/**/*.setup.ts',
+      use: { 
+        baseURL: process.env.UI_BASE_URL,
+      }
     },
 
     {
       name: 'chromium - authenticated - ui',
       testMatch: '**/ui/**/*.auth.spec.ts',
-      use: { ...devices['Desktop Chrome'], storageState: 'playwright/.auth/user.json', baseURL: 'https://automationexercise.com', }, dependencies: ['setup - ui'],
+      use: { ...devices['Desktop Chrome'], storageState: 'playwright/.auth/user.json', baseURL: process.env.UI_BASE_URL, }, dependencies: ['setup - ui'],
     },
 
     {
       name: 'firefox - authenticated - ui',
       testMatch: '**/ui/**/*.auth.spec.ts',
-      use: { ...devices['Desktop Firefox'], storageState: 'playwright/.auth/user.json', baseURL: 'https://automationexercise.com', }, dependencies: ['setup - ui'],
+      use: { ...devices['Desktop Firefox'], storageState: 'playwright/.auth/user.json', baseURL: process.env.UI_BASE_URL, }, dependencies: ['setup - ui'],
     },
 
     {
       name: 'chromium - guest - ui',
       testMatch: '**/ui/**/*.noauth.spec.ts',
-      use: { ...devices['Desktop Chrome'], baseURL: 'https://automationexercise.com', }, 
+      use: { ...devices['Desktop Chrome'], baseURL: process.env.UI_BASE_URL, }, 
     },
 
     {
       name: 'firefox - guest - ui',
       testMatch: '**/ui/**/*.noauth.spec.ts',
-      use: { ...devices['Desktop Firefox'], baseURL: 'https://automationexercise.com', }, 
+      use: { ...devices['Desktop Firefox'], baseURL: process.env.UI_BASE_URL, }, 
     },
 
     {
       name: 'setup - api',
       testMatch: '**/api/**/*.setup.ts',
       use: { 
-        baseURL: 'https://restful-booker.herokuapp.com',
+        baseURL: process.env.API_BASE_URL,
       },
     },
 
@@ -76,7 +69,7 @@ export default defineConfig({
       name: 'api',
       testMatch: '**/api/**/*.api.spec.ts',
       use: { 
-        baseURL: 'https://restful-booker.herokuapp.com', 
+        baseURL: process.env.API_BASE_URL, 
         storageState: 'playwright/.auth/user_api.json',
         extraHTTPHeaders: {
           'Accept': 'application/json'

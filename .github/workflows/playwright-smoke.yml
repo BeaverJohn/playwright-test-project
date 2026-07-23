@@ -1,0 +1,44 @@
+name: Run Playwright Smoke Tests
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+    paths-ignore:
+      - 'README.md'
+      - '.gitignore'
+  schedule:
+    # Runs automatically every day at 02:00 AM UTC
+    - cron: '0 2 * * *'    
+jobs:
+  test:
+    timeout-minutes: 60
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - uses: actions/setup-node@v4
+      with:
+        node-version: lts/*
+        cache: 'npm'
+    - name: Install dependencies
+      run: npm ci
+    - name: Install Playwright Browsers
+      run: npx playwright install --with-deps
+
+    - name: Run Playwright tests
+      env:
+        UI_BASE_URL: ${{ secrets.UI_BASE_URL }}
+        API_BASE_URL: ${{ secrets.API_BASE_URL }}
+        API_ADMIN_USERNAME: ${{ secrets.API_ADMIN_USERNAME }}
+        API_ADMIN_PASSWORD: ${{ secrets.API_ADMIN_PASSWORD }}
+        UI_TEST_USERNAME: ${{ secrets.UI_TEST_USERNAME }}
+        UI_TEST_EMAIL: ${{ secrets.UI_TEST_EMAIL }}
+        UI_TEST_PASSWORD: ${{ secrets.UI_TEST_PASSWORD }}
+      run: npx playwright test --grep "@smoke"
+    - name: Upload Playwright Report & Artifacts
+      if: ${{ !cancelled() }}
+      uses: actions/upload-artifact@v4
+      with:
+        name: playwright-report
+        path: playwright-report/
+        retention-days: 5

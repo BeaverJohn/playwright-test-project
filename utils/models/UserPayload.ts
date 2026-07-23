@@ -29,6 +29,6 @@ export class UserPayload {
   }
 
   static getDefaultUser(): UserPayload {
-    return new UserPayload('testuser2288821111', 'testuser2288821111@email.com', 'test123')
+    return new UserPayload(process.env.UI_TEST_USERNAME!, process.env.UI_TEST_EMAIL!, process.env.UI_TEST_PASSWORD!)
   }
 }
