@@ -3,7 +3,10 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-  "scripts": {},
+  "scripts": {
+    "test:smoke:chromium": "playwright test --grep \"@smoke\" --project=\"chromium - authenticated - ui\" --project=\"chromium - guest - ui\" --project=\"api\"",
+    "test:smoke:firefox": "playwright test --grep \"@smoke\" --project=\"firefox - authenticated - ui\" --project=\"firefox - guest - ui\" --project=\"api\""
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",
