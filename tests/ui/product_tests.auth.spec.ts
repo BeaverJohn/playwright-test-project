@@ -17,7 +17,7 @@ test('add product to cart on product page', async ({ homePage, productInfoPage }
   await productInfoPage.productAddedModal.clickContinue()
 });
 
-test('post product review', async ({ homePage, productInfoPage }) => {  
+test('post product review', { tag: '@smoke' }, async ({ homePage, productInfoPage }) => {  
   await homePage.goto()
   const product = homePage.getProductCardByName('Fancy Green Top')
   await product.viewProductLink.click()

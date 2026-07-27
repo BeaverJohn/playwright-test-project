@@ -9,7 +9,18 @@ on:
       - '.gitignore'
   schedule:
     # Runs automatically every day at 02:00 AM UTC
-    - cron: '0 2 * * *'    
+    - cron: '0 2 * * *'
+  workflow_dispatch:
+    inputs:
+      browser:
+        description: 'Select browser for UI tests'
+        required: true
+        default: 'chromium'
+        type: choice
+        options:
+          - 'chromium'
+          - 'firefox'
+
 jobs:
   test:
     timeout-minutes: 60
@@ -27,6 +38,7 @@ jobs:
 
     - name: Run Playwright tests
       env:
+        UI_PROJECT: ${{ inputs.browser || 'chromium' }}
         UI_BASE_URL: ${{ secrets.UI_BASE_URL }}
         API_BASE_URL: ${{ secrets.API_BASE_URL }}
         API_ADMIN_USERNAME: ${{ secrets.API_ADMIN_USERNAME }}
@@ -34,7 +46,7 @@ jobs:
         UI_TEST_USERNAME: ${{ secrets.UI_TEST_USERNAME }}
         UI_TEST_EMAIL: ${{ secrets.UI_TEST_EMAIL }}
         UI_TEST_PASSWORD: ${{ secrets.UI_TEST_PASSWORD }}
-      run: npx playwright test --grep "@smoke"
+      run: npm run test:smoke:$UI_PROJECT
     - name: Upload Playwright Report & Artifacts
       if: ${{ !cancelled() }}
       uses: actions/upload-artifact@v4
