@@ -1,20 +1,16 @@
 import { test as base } from '@playwright/test';
 import { UserApiClient } from '../api/UserApiClient';
 import { BookingApiClient } from '../api/BookingApiClient';
+import { apiLoggerFixtures } from './api_logger_fixture';
 
 type ApiFixtures = {
     userApiClient: UserApiClient;
     bookingApiClient: BookingApiClient;
 };
 
-export const apiFixtures = base.extend<ApiFixtures>({
-    userApiClient: async ({ request }, use) => {
-        const client = new UserApiClient(request);
-        await use(client);
-    },
-
-    bookingApiClient: async ({ request }, use) => {
-        const client = new BookingApiClient(request);
+export const apiFixtures = apiLoggerFixtures.extend<{ bookingApiClient: BookingApiClient }>({
+    bookingApiClient: async ({ loggingRequest }, use) => {
+        const client = new BookingApiClient(loggingRequest);
         await use(client);
     }
 });

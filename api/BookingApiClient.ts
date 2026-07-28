@@ -12,8 +12,8 @@ export class BookingApiClient {
 
     private readonly request: APIRequestContext
 
-    constructor(request: APIRequestContext) {
-        this.request = request;
+    constructor(loggingRequest: APIRequestContext) {
+        this.request = loggingRequest;
     }
 
     async createBooking(bookingData: BookingPayload): Promise<APIResponse> {
