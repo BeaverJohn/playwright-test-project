@@ -20,6 +20,8 @@ on:
         options:
           - 'chromium'
           - 'firefox'
+permissions:
+  contents: write          
 
 jobs:
   test:
