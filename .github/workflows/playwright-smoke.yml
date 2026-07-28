@@ -20,6 +20,8 @@ on:
         options:
           - 'chromium'
           - 'firefox'
+permissions:
+  contents: write          
 
 jobs:
   test:
@@ -47,10 +49,26 @@ jobs:
         UI_TEST_EMAIL: ${{ secrets.UI_TEST_EMAIL }}
         UI_TEST_PASSWORD: ${{ secrets.UI_TEST_PASSWORD }}
       run: npm run test:smoke:$UI_PROJECT
-    - name: Upload Playwright Report & Artifacts
+      #backup
+    - name: Upload Monocart Report & Artifacts
       if: ${{ !cancelled() }}
       uses: actions/upload-artifact@v4
       with:
-        name: playwright-report
-        path: playwright-report/
+        name: monocart-report
+        path: monocart-report/
         retention-days: 5
+
+    # Publish Monocart Report to GitHub Pages
+    - name: Deploy Monocart Report to GitHub Pages
+      if: ${{ !cancelled() }}
+      uses: peaceiris/actions-gh-pages@v3
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: ./monocart-report    
+
+    # Add clickable Monocart report link directly to the GitHub Actions Run Summary
+    - name: Add Report Link to Job Summary
+      if: ${{ !cancelled() }}
+      run: |
+        echo "### 🎭 Monocart Test Report Deployed" >> $GITHUB_STEP_SUMMARY
+        echo "🔗 **[View Live Monocart Report](https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/)**" >> $GITHUB_STEP_SUMMARY      

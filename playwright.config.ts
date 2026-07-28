@@ -14,7 +14,23 @@ export default defineConfig({
   /* Opt out of parallel tests on CI. */
   workers: process.env.CI ? 1 : undefined,
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */
-  reporter: 'html',
+  reporter: [
+    ['list'], // Console logger
+    [
+      'monocart-reporter',
+      {
+        name: 'Playwright Test Report',
+        outputFile: './monocart-report/index.html',
+        inline: true,
+        
+        // Optional reporter configuration options
+        tags: {
+          smoke: { style: 'background:#2196f3; color:#fff;' },
+          critical: { style: 'background:#f44336; color:#fff;' },
+        },
+      },
+    ],
+  ],
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
